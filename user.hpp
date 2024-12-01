@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include "post.hpp"
 using namespace std;
@@ -27,6 +28,8 @@ int numFriends;
 public:
   User(string username, string password, string city);
   User(const User& user);
+
+  string getUsername() const;
   
 
 };

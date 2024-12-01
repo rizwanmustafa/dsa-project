@@ -42,3 +42,7 @@ User::User(const User &user)
   this->lastloginTime = user.lastloginTime;
   
 }
+
+string User::getUsername() const {
+  return this->username;
+}

@@ -1,13 +1,46 @@
 #include <iostream>
+#include "user.hpp"
+#include "LinkedList.hpp"
+#include "misc.hpp"
 
 using namespace std;
+
+class Manager{
+  LinkedList<User> users;
+
+
+  public:
+
+  void addNewUser(User& user){
+    users.insertLast(user);
+  }
+
+  void printAllUsers(){
+    for(int i = 0; i < users.size(); i++){
+      cout << users[i].getUsername() << endl;
+    }
+  }
+
+};
+
+
+void signup(Manager& m){
+
+  User newUser = getUserFromInput();
+  m.addNewUser(newUser);
+
+}
+
+
 
 void printMenu()
 {
   int userChoice;
+  Manager m;
 
   while (true)
   {
+    m.printAllUsers();
     cout << "0. Exit\n";
     cout << "1. Signup\n";
     cout << "2. Login\n";
