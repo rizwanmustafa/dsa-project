@@ -5,10 +5,15 @@
 
 using namespace std;
 
-Post::Post(){
-  cout << "Post constructor has been called!\n";
+Post::Post(string content){
+    this->content = content;
 }
 
 Post::Post(const Post& p){
   cout << "Post copy constructor has been called!\n";
+}
+
+
+string Post::getContent() const{
+    return this->content;
 }

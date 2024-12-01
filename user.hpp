@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "post.hpp"
+#include "stack.hpp"
 using namespace std;
 
 enum RelationshipStatus
@@ -21,8 +22,7 @@ class User
   string username;
   string password;
   string city;
-  Post *posts;
-  int numPosts;
+  Stack<Post> posts;
   time_t lastloginTime;
 
   FriendRelationship *friends;
@@ -39,4 +39,11 @@ public:
   void addFriend(string friendUsername, RelationshipStatus status);
   int getNumFriends() const;
   FriendRelationship& getFriend(int index) const;
+  int getFriendIndex(string friendUsername) const;
+  
+  int getNumPosts() const;
+  Post getPost(int index) const;
+  void addPost(Post post);
+
+  ~User();
 };

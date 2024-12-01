@@ -15,12 +15,12 @@ User::User(string username, string password, string city)
   this->password = password;
   this->city = city;
   this->numFriends = 0;
-  this->numPosts = 0;
   cout << "I ran fully!";
 }
 
 User::User(const User &user)
 {
+  cout << "Copy constructor called!\n";
   cout << "A user created with the following attributes";
   cout << "Username: " << user.username << "\n";
   cout << "Password: " << user.password << "\n";
@@ -30,12 +30,11 @@ User::User(const User &user)
   this->password = user.password;
   this->city = user.city;
 
-  this->numPosts = user.numPosts;
-  this->posts = new Post[numPosts];
-  for (int i = 0; i < numPosts; i++)
-  {
-    posts[i] = user.posts[i];
+
+  for(int i = 0; i < user.posts.size(); i++){
+    this->posts.push(user.posts[i]);
   }
+
 
   this->numFriends = user.numFriends;
   this->friends = new FriendRelationship[numFriends];
@@ -85,4 +84,29 @@ int User::getNumFriends() const { return this->numFriends;}
 
   FriendRelationship& User::getFriend(int index) const{
     return friends[index];
+  }
+
+User::~User(){
+  cout << "Destructor called!\n";
+  delete[] friends;
+}
+
+int User::getFriendIndex(string friendUsername) const{
+  for(int i = 0; i < numFriends; i++){
+    if(friends[i].friendUsername == friendUsername){
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+
+int User::getNumPosts() const {return this->posts.size();}
+
+  Post User::getPost(int index) const {
+    return posts[index];
+  }
+  void User::addPost(Post post) {
+    this->posts.push(post);
   }

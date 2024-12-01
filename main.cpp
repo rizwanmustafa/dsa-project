@@ -11,15 +11,33 @@
 
 using namespace std;
 
+
+void displayFriends(Manager& m){
+  if(m.getCurrentUser() == nullptr){
+    cout << "No user is logged in!\n";
+    return;
+  }
+
+  for(int i = 0; i < m.getCurrentUser()->getNumFriends(); i++){
+    FriendRelationship userFriend = m.getCurrentUser()->getFriend(i);
+    if(userFriend.status == ACCEPTED){
+      cout << i + 1 << ". " << userFriend.friendUsername << endl;
+    }
+  }
+}
+
 void manageFollowRequests(Manager &m)
 {
+
+  // TODO: Find a way around the fact that the user can accept their own friend requests
+
+
   if (m.getCurrentUser() == nullptr)
   {
     cout << "No user is logged in!\n";
     return;
   }
 
-  // Write code to display all friend requests and allow user to accept or reject them and allow user to do bulk action
 
   // Ask user if they want to perform a bulk action at all
   cout << "Do you want to perform a bulk action? (y/n): ";
@@ -36,6 +54,8 @@ void manageFollowRequests(Manager &m)
 
   for (int i = 0; i < m.getCurrentUser()->getNumFriends(); i++)
   {
+        User* friendUser = m.findUser(m.getCurrentUser()->getFriend(i).friendUsername);
+
     if (m.getCurrentUser()->getFriend(i).status == PENDING)
     {
 
@@ -44,18 +64,20 @@ void manageFollowRequests(Manager &m)
         if (tolower(choice) == 'a')
         {
           m.getCurrentUser()->getFriend(i).status = ACCEPTED;
+          friendUser->getFriend(friendUser->getFriendIndex(m.getCurrentUser()->getUsername())).status = ACCEPTED;
+
           cout << "Friend request accepted!\n";
         }
         else if (tolower(choice) == 'r')
         {
           m.getCurrentUser()->getFriend(i).status = BLOCKED;
+          friendUser->getFriend(friendUser->getFriendIndex(m.getCurrentUser()->getUsername())).status = BLOCKED;
           cout << "Friend request rejected!\n";
         }
       }
       else
       {
         cout << m.getCurrentUser()->getFriend(i).friendUsername << " has sent you a friend request!\n";
-        User* friendUser = m.findUser(m.getCurrentUser()->getFriend(i).friendUsername);
         // TODO: Write code accept/reject the friends request as well
         cout << "Do you want to accept or reject this request? (a/r): ";
         char choice;
@@ -63,11 +85,13 @@ void manageFollowRequests(Manager &m)
         if (choice == 'a')
         {
           m.getCurrentUser()->getFriend(i).status = ACCEPTED;
+          friendUser->getFriend(friendUser->getFriendIndex(m.getCurrentUser()->getUsername())).status = ACCEPTED;
           cout << "Friend request accepted!\n";
         }
         else if (choice == 'r')
         {
           m.getCurrentUser()->getFriend(i).status = BLOCKED;
+          friendUser->getFriend(friendUser->getFriendIndex(m.getCurrentUser()->getUsername())).status = BLOCKED;
           cout << "Friend request rejected!\n";
         }
       }
@@ -89,14 +113,32 @@ void sendFriendRequest(Manager &m)
   cin >> ws;
   getline(cin, friendUsername);
 
+  // Check if the user is trying a duplicate friend request
+  for (int i = 0; i < m.getCurrentUser()->getNumFriends(); i++)
+  {
+    if (m.getCurrentUser()->getFriend(i).friendUsername == friendUsername)
+    {
+      cout << "You have already sent a friend request to this user!\n";
+      return;
+    }
+  }
+
+  if(friendUsername == m.getCurrentUser()->getUsername())
+  {
+    cout << "You cannot send a friend request to yourself!\n";
+    return;
+  }
+
   User *friendUser = m.findUser(friendUsername);
-  if (friendUser == nullptr)
+  if (friendUser == nullptr )
   {
     cout << "User not found!\n";
     return;
   }
 
+
   m.getCurrentUser()->addFriend(friendUsername, PENDING);
+  friendUser->addFriend(m.getCurrentUser()->getUsername(), PENDING);
   cout << "Friend request sent!\n";
 }
 
@@ -123,6 +165,10 @@ void signup(Manager &m)
 
 void login(Manager &m)
 {
+  if(m.getCurrentUser() != nullptr){
+    cout << "A user is already logged in!\n";
+    return;
+  }
   string username, password;
   cout << "Enter username: ";
   cin >> ws;
@@ -138,6 +184,55 @@ void login(Manager &m)
   else
   {
     cout << "Login failed!\n";
+  }
+}
+
+void displayNewsFeed(Manager& m){
+  // Write code to display the current users posts
+  if(m.getCurrentUser() == nullptr){
+    cout << "No user is logged in!\n";
+    return;
+  }
+
+  cout << "Your posts:\n";
+  for(int i = 0; i < m.getCurrentUser()->getNumPosts(); i++){
+    cout << m.getCurrentUser()->getPost(i).getContent() << endl;
+  }
+}
+
+
+void createPost(Manager &m)
+{
+  if (m.getCurrentUser() == nullptr)
+  {
+    cout << "No user is logged in!\n";
+    return;
+  }
+
+  string content;
+  cout << "Enter the content of the post: ";
+  cin >> ws;
+  getline(cin, content);
+
+  m.getCurrentUser()->addPost(Post(content));
+  cout << "Post created!\n";
+}
+
+void displayFriendsNewsFeed(Manager&m){
+  if(m.getCurrentUser() == nullptr){
+    cout << "No user is logged in!\n";
+    return;
+  }
+
+  for(int i = 0; i < m.getCurrentUser()->getNumFriends(); i++){
+    FriendRelationship userFriend = m.getCurrentUser()->getFriend(i);
+    if(userFriend.status == ACCEPTED){
+      User* friendUser = m.findUser(userFriend.friendUsername);
+      cout << "Posts of " << friendUser->getUsername() << ":\n";
+      for(int j = 0; j < friendUser->getNumPosts(); j++){
+        cout << friendUser->getPost(j).getContent() << endl;
+      }
+    }
   }
 }
 
@@ -166,8 +261,9 @@ void printMenu()
     cout << "7. View your Notifications\n";
     cout << "8. Message a friend\n";
     cout << "9. Search Users\n";
-    cout << "10. Followers List\n";
+    cout << "10. Display friends list\n";
     cout << "11. Newsfeed\n";
+    cout << "12. Display friends posts\n";
     cout << "Enter choice: ";
 
     while (!(cin >> userChoice) || userChoice < 0 || userChoice > 11)
@@ -205,7 +301,7 @@ void printMenu()
     }
     else if (userChoice == 6)
     {
-      cout << "Posts functionality!\n";
+      createPost(m);
     }
     else if (userChoice == 7)
     {
@@ -221,11 +317,15 @@ void printMenu()
     }
     else if (userChoice == 10)
     {
-      cout << "Followers List functionality!\n";
+      displayFriends(m);
     }
     else if (userChoice == 11)
     {
-      cout << "Newsfeed functionality!\n";
+      displayNewsFeed(m);
+    }
+    else if (userChoice == 12)
+    {
+      displayFriendsNewsFeed(m);
     }
   }
 
