@@ -4,10 +4,12 @@
 
 using namespace std;
 
-
-bool isUsernameUnique(const LinkedList<User>& users, string newUsername){
-  for(int i = 0; i < users.size(); i++){
-    if(users[i].getUsername() == newUsername){
+bool isUsernameUnique(const LinkedList<User*> &users, string newUsername)
+{
+  for (int i = 0; i < users.size(); i++)
+  {
+    if (users[i]->getUsername() == newUsername)
+    {
       return false;
     }
   }
@@ -15,22 +17,31 @@ bool isUsernameUnique(const LinkedList<User>& users, string newUsername){
   return true;
 }
 
-User getUserFromInput()
+User *getUserFromInput(const LinkedList<User*>&existingUsers)
 {
-  string username, password, city;
+  string username = "", password = "", city = "";
 
-  cout << "Enter username: ";
-  cin >> ws;
-  getline(cin, username);
+  while (username == "" || isUsernameUnique(existingUsers, username) == false)
+  {
+    cout << "Enter username: ";
+    cin >> ws;
+    getline(cin, username);
+  }
 
-  cout << "Enter password: ";
-  cin >> ws;
-  getline(cin, username);
+  while (password == "")
+  {
 
-  cout << "Enter city: ";
-  cin >> ws;
-  getline(cin, username);
+    cout << "Enter password: ";
+    cin >> ws;
+    getline(cin, password);
+  }
 
+  while (city == "")
+  {
+    cout << "Enter city: ";
+    cin >> ws;
+    getline(cin, city);
+  }
 
-  return User(username, password, city);
+  return new User(username, password, city);
 }

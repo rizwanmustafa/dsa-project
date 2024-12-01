@@ -3,33 +3,40 @@
 #include "post.hpp"
 using namespace std;
 
-enum RelationshipStatus{
+enum RelationshipStatus
+{
   PENDING,
   ACCEPTED,
-  BLOCKED 
+  BLOCKED
 };
 
-struct FriendRelationship{
+struct FriendRelationship
+{
   string friendUsername;
   RelationshipStatus status;
 };
 
-class User{
+class User
+{
   string username;
   string password;
   string city;
-  Post* posts;
+  Post *posts;
   int numPosts;
   time_t lastloginTime;
 
-FriendRelationship* friends;
-int numFriends;
+  FriendRelationship *friends;
+  int numFriends;
 
 public:
   User(string username, string password, string city);
-  User(const User& user);
+  User(const User &user);
 
   string getUsername() const;
-  
+  string getPassword() const;
+  string getCity() const;
 
+  void addFriend(string friendUsername, RelationshipStatus status);
+  int getNumFriends() const;
+  FriendRelationship& getFriend(int index) const;
 };

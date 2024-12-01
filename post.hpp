@@ -1,3 +1,4 @@
+#pragma once
 class Post{
   public:
   Post();
