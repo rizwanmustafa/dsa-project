@@ -3,14 +3,14 @@
 
 using namespace std;
 
-
-class Post{
-  private:
+class Post
+{
+private:
   string content;
-  public:
+
+public:
   Post();
   Post(string content);
-  Post(const Post& p);
+  Post(const Post &p);
   string getContent() const;
-
 };

@@ -3,10 +3,8 @@
 
 using namespace std;
 
-
 #ifndef STACK_HPP
 #define Stack_HPP
-
 
 template <typename T>
 class Stack
@@ -14,25 +12,24 @@ class Stack
     struct StackNode
     {
         T data;
-        StackNode* next;
+        StackNode *next;
         StackNode(T data);
     };
 
-    StackNode* top;
+    StackNode *top;
     int count;
 
 public:
     Stack();
-    Stack(const Stack& other);
+    Stack(const Stack &other);
     ~Stack();
     void push(T data);
     void pop();
     T peek() const;
     bool isEmpty();
     int size() const;
-    T& operator[](int index) const;
+    T &operator[](int index) const;
 };
-
 
 template <typename T>
 Stack<T>::StackNode::StackNode(T data)
@@ -43,13 +40,13 @@ Stack<T>::StackNode::StackNode(T data)
 
 // Copy Constructor
 template <typename T>
-Stack<T>::Stack(const Stack& other)
+Stack<T>::Stack(const Stack &other)
 {
     this->top = nullptr;
     this->count = 0;
 
-    StackNode* temp = other.top;
-    StackNode* newNode = nullptr;
+    StackNode *temp = other.top;
+    StackNode *newNode = nullptr;
 
     while (temp != nullptr)
     {
@@ -83,7 +80,7 @@ Stack<T>::~Stack()
 template <typename T>
 void Stack<T>::push(T data)
 {
-    StackNode* newNode = new StackNode(data);
+    StackNode *newNode = new StackNode(data);
     newNode->next = this->top;
     this->top = newNode;
     this->count++;
@@ -98,7 +95,7 @@ void Stack<T>::pop()
         return;
     }
 
-    StackNode* temp = this->top;
+    StackNode *temp = this->top;
     this->top = this->top->next;
     delete temp;
     this->count--;
@@ -130,17 +127,16 @@ int Stack<T>::size() const
     return this->count;
 }
 
-
 // Overloaded [] Operator
 template <typename T>
-T& Stack<T>::operator[](int index) const
+T &Stack<T>::operator[](int index) const
 {
     if (index < 0 || index >= this->count)
     {
         throw out_of_range("Index out of range!");
     }
 
-    StackNode* temp = this->top;
+    StackNode *temp = this->top;
     for (int i = 0; i < index; i++)
     {
         temp = temp->next;
@@ -148,8 +144,5 @@ T& Stack<T>::operator[](int index) const
 
     return temp->data;
 }
-
-
-
 
 #endif // !STACK_HPP

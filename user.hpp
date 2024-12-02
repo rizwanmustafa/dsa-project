@@ -38,9 +38,9 @@ public:
 
   void addFriend(string friendUsername, RelationshipStatus status);
   int getNumFriends() const;
-  FriendRelationship& getFriend(int index) const;
+  FriendRelationship &getFriend(int index) const;
   int getFriendIndex(string friendUsername) const;
-  
+
   int getNumPosts() const;
   Post getPost(int index) const;
   void addPost(Post post);

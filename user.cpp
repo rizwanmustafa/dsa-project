@@ -30,11 +30,10 @@ User::User(const User &user)
   this->password = user.password;
   this->city = user.city;
 
-
-  for(int i = 0; i < user.posts.size(); i++){
+  for (int i = 0; i < user.posts.size(); i++)
+  {
     this->posts.push(user.posts[i]);
   }
-
 
   this->numFriends = user.numFriends;
   this->friends = new FriendRelationship[numFriends];
@@ -76,24 +75,27 @@ void User::addFriend(string friendUsername, RelationshipStatus status)
 
   this->friends = newFriends;
   this->numFriends++;
-
 }
 
-int User::getNumFriends() const { return this->numFriends;}
+int User::getNumFriends() const { return this->numFriends; }
 
+FriendRelationship &User::getFriend(int index) const
+{
+  return friends[index];
+}
 
-  FriendRelationship& User::getFriend(int index) const{
-    return friends[index];
-  }
-
-User::~User(){
+User::~User()
+{
   cout << "Destructor called!\n";
   delete[] friends;
 }
 
-int User::getFriendIndex(string friendUsername) const{
-  for(int i = 0; i < numFriends; i++){
-    if(friends[i].friendUsername == friendUsername){
+int User::getFriendIndex(string friendUsername) const
+{
+  for (int i = 0; i < numFriends; i++)
+  {
+    if (friends[i].friendUsername == friendUsername)
+    {
       return i;
     }
   }
@@ -101,18 +103,19 @@ int User::getFriendIndex(string friendUsername) const{
   return -1;
 }
 
+int User::getNumPosts() const { return this->posts.size(); }
 
-int User::getNumPosts() const {return this->posts.size();}
+Post User::getPost(int index) const
+{
+  return posts[index];
+}
+void User::addPost(Post post)
+{
+  this->posts.push(post);
+}
 
-  Post User::getPost(int index) const {
-    return posts[index];
-  }
-  void User::addPost(Post post) {
-    this->posts.push(post);
-  }
-
-
-void User::displayPublicData() const{
+void User::displayPublicData() const
+{
   cout << "Username: " << this->username << "\n";
   cout << "City: " << this->city << "\n";
   cout << "Number of friends: " << this->numFriends << "\n";

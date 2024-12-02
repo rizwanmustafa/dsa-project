@@ -7,13 +7,12 @@ class BST
 {
 
 public:
-
 	class BSTNode
 	{
 	public:
 		T data;
-		BSTNode* left;
-		BSTNode* right;
+		BSTNode *left;
+		BSTNode *right;
 		BSTNode(T data)
 		{
 			this->data = data;
@@ -26,7 +25,7 @@ public:
 		this->root = nullptr;
 	}
 
-	BST(const BST& other)
+	BST(const BST &other)
 	{
 		this->root = copy(other.root);
 	}
@@ -40,13 +39,13 @@ public:
 	{
 		this->root = deleteData(this->root, data);
 	}
-	
+
 	bool search(T data)
 	{
 		return search(this->root, data);
 	}
 
-	BSTNode* getRootNode(){ return this->root; }
+	BSTNode *getRootNode() { return this->root; }
 
 	~BST()
 	{
@@ -54,20 +53,20 @@ public:
 	}
 
 private:
-	BSTNode* copy(BSTNode* other)
+	BSTNode *copy(BSTNode *other)
 	{
 		if (other == nullptr)
 		{
 			return nullptr;
 		}
 
-		BSTNode* newNode = new BSTNode(other->data);
+		BSTNode *newNode = new BSTNode(other->data);
 		newNode->lest = copy(other->left);
 		newNode->right = copy(other->right);
 		return newNode;
 	}
 
-	BSTNode* insert(BSTNode* nodeptr, T data)
+	BSTNode *insert(BSTNode *nodeptr, T data)
 	{
 		if (nodeptr == nullptr)
 		{
@@ -78,7 +77,7 @@ private:
 		{
 			nodeptr->left = insert(nodeptr->left, data);
 		}
-		else if(data > nodeptr->data)
+		else if (data > nodeptr->data)
 		{
 			nodeptr->right = insert(nodeptr->right, data);
 		}
@@ -89,9 +88,9 @@ private:
 		}
 	}
 
-	BSTNode* root;
+	BSTNode *root;
 
-	BSTNode* deleteValue(BSTNode* nodeptr, T data)
+	BSTNode *deleteValue(BSTNode *nodeptr, T data)
 	{
 		if (nodeptr == nullptr)
 		{
@@ -114,19 +113,19 @@ private:
 			}
 			else if (nodeptr->left == nullptr)
 			{
-				BSTNode* temp = nodeptr->right;
+				BSTNode *temp = nodeptr->right;
 				delete nodeptr;
 				return temp;
 			}
 			else if (nodeptr->right == nullptr)
 			{
-				BSTNode* temp = nodeptr->left;
+				BSTNode *temp = nodeptr->left;
 				delete nodeptr;
 				return temp;
 			}
 			else
 			{
-				BSTNode* minNode = nodeptr->right;
+				BSTNode *minNode = nodeptr->right;
 				while (minNode->left != nullptr)
 				{
 					minNode = minNode->left;
@@ -136,8 +135,8 @@ private:
 			}
 		}
 	}
-	
-	bool search(BSTNode* nodeptr, T data)
+
+	bool search(BSTNode *nodeptr, T data)
 	{
 		if (nodeptr == nullptr)
 		{
@@ -159,7 +158,7 @@ private:
 		}
 	}
 
-	void clear(BSTNode* nodeptr)
+	void clear(BSTNode *nodeptr)
 	{
 		if (nodeptr == nullptr)
 		{
@@ -171,6 +170,5 @@ private:
 		delete nodeptr;
 	}
 };
-
 
 #endif // BST_HPP

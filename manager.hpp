@@ -5,34 +5,38 @@
 #include "BST.hpp"
 #include "LinkedList.hpp"
 
-struct BstUserEntry{
-  User* user;
+struct BstUserEntry
+{
+  User *user;
   string username;
 
-
-
-
-  bool operator < (const BstUserEntry& other){
+  bool operator<(const BstUserEntry &other)
+  {
     return username < other.username;
   }
 
-  bool operator > (const BstUserEntry& other){
+  bool operator>(const BstUserEntry &other)
+  {
     return username > other.username;
   }
 
-  bool operator == (const BstUserEntry& other){
+  bool operator==(const BstUserEntry &other)
+  {
     return username == other.username;
   }
 
-  bool operator != (const BstUserEntry& other){
+  bool operator!=(const BstUserEntry &other)
+  {
     return username != other.username;
   }
 
-  bool operator <= (const BstUserEntry& other){
+  bool operator<=(const BstUserEntry &other)
+  {
     return username <= other.username;
   }
 
-  bool operator >= (const BstUserEntry& other){
+  bool operator>=(const BstUserEntry &other)
+  {
     return username >= other.username;
   }
 };
@@ -51,16 +55,22 @@ public:
     this->currentUser = nullptr;
   }
 
+  User *searchUser(string username)
+  {
+    BST<BstUserEntry>::BSTNode *node = userBst.getRootNode();
 
-  User* searchUser(string username){
-    BST<BstUserEntry>::BSTNode* node = userBst.getRootNode();
-
-    while(node != nullptr){
-      if(node->data.username == username){
+    while (node != nullptr)
+    {
+      if (node->data.username == username)
+      {
         return node->data.user;
-      }else if(node->data.username < username){
+      }
+      else if (node->data.username < username)
+      {
         node = node->right;
-      }else{
+      }
+      else
+      {
         node = node->left;
       }
     }
@@ -110,8 +120,8 @@ public:
 
   void addNewUser(User *user)
   {
-    if(user == nullptr) return;
-
+    if (user == nullptr)
+      return;
 
     users.insertLast(user);
     BstUserEntry entry;
