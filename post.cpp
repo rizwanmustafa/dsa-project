@@ -5,6 +5,10 @@
 
 using namespace std;
 
+Post::Post(){
+  this->content = "";
+}
+
 Post::Post(string content){
     this->content = content;
 }
