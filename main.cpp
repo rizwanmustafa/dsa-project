@@ -11,16 +11,19 @@
 
 using namespace std;
 
-
-void displayFriends(Manager& m){
-  if(m.getCurrentUser() == nullptr){
+void displayFriends(Manager &m)
+{
+  if (m.getCurrentUser() == nullptr)
+  {
     cout << "No user is logged in!\n";
     return;
   }
 
-  for(int i = 0; i < m.getCurrentUser()->getNumFriends(); i++){
+  for (int i = 0; i < m.getCurrentUser()->getNumFriends(); i++)
+  {
     FriendRelationship userFriend = m.getCurrentUser()->getFriend(i);
-    if(userFriend.status == ACCEPTED){
+    if (userFriend.status == ACCEPTED)
+    {
       cout << i + 1 << ". " << userFriend.friendUsername << endl;
     }
   }
@@ -31,13 +34,11 @@ void manageFollowRequests(Manager &m)
 
   // TODO: Find a way around the fact that the user can accept their own friend requests
 
-
   if (m.getCurrentUser() == nullptr)
   {
     cout << "No user is logged in!\n";
     return;
   }
-
 
   // Ask user if they want to perform a bulk action at all
   cout << "Do you want to perform a bulk action? (y/n): ";
@@ -54,7 +55,7 @@ void manageFollowRequests(Manager &m)
 
   for (int i = 0; i < m.getCurrentUser()->getNumFriends(); i++)
   {
-        User* friendUser = m.findUser(m.getCurrentUser()->getFriend(i).friendUsername);
+    User *friendUser = m.findUser(m.getCurrentUser()->getFriend(i).friendUsername);
 
     if (m.getCurrentUser()->getFriend(i).status == PENDING)
     {
@@ -99,7 +100,6 @@ void manageFollowRequests(Manager &m)
   }
 }
 
-
 void sendFriendRequest(Manager &m)
 {
   if (m.getCurrentUser() == nullptr)
@@ -123,25 +123,23 @@ void sendFriendRequest(Manager &m)
     }
   }
 
-  if(friendUsername == m.getCurrentUser()->getUsername())
+  if (friendUsername == m.getCurrentUser()->getUsername())
   {
     cout << "You cannot send a friend request to yourself!\n";
     return;
   }
 
   User *friendUser = m.findUser(friendUsername);
-  if (friendUser == nullptr )
+  if (friendUser == nullptr)
   {
     cout << "User not found!\n";
     return;
   }
 
-
   m.getCurrentUser()->addFriend(friendUsername, PENDING);
   friendUser->addFriend(m.getCurrentUser()->getUsername(), PENDING);
   cout << "Friend request sent!\n";
 }
-
 
 void printCurrentUser(Manager &m)
 {
@@ -156,6 +154,30 @@ void printCurrentUser(Manager &m)
   }
 }
 
+void searchUser(Manager &m)
+{
+  if (m.getCurrentUser() == nullptr)
+  {
+    cout << "No user is logged in!\n";
+    return;
+  }
+
+  string username;
+  cout << "Enter the username you want to search for: ";
+  cin >> ws;
+  getline(cin, username);
+
+  User *user = m.findUser(username);
+  if (user == nullptr)
+  {
+    cout << "User not found!\n";
+    return;
+  }
+
+  cout << "User found!\n";
+  user->displayPublicData();
+}
+
 void signup(Manager &m)
 {
 
@@ -165,7 +187,8 @@ void signup(Manager &m)
 
 void login(Manager &m)
 {
-  if(m.getCurrentUser() != nullptr){
+  if (m.getCurrentUser() != nullptr)
+  {
     cout << "A user is already logged in!\n";
     return;
   }
@@ -187,19 +210,21 @@ void login(Manager &m)
   }
 }
 
-void displayNewsFeed(Manager& m){
+void displayNewsFeed(Manager &m)
+{
   // Write code to display the current users posts
-  if(m.getCurrentUser() == nullptr){
+  if (m.getCurrentUser() == nullptr)
+  {
     cout << "No user is logged in!\n";
     return;
   }
 
   cout << "Your posts:\n";
-  for(int i = 0; i < m.getCurrentUser()->getNumPosts(); i++){
+  for (int i = 0; i < m.getCurrentUser()->getNumPosts(); i++)
+  {
     cout << m.getCurrentUser()->getPost(i).getContent() << endl;
   }
 }
-
 
 void createPost(Manager &m)
 {
@@ -218,18 +243,23 @@ void createPost(Manager &m)
   cout << "Post created!\n";
 }
 
-void displayFriendsNewsFeed(Manager&m){
-  if(m.getCurrentUser() == nullptr){
+void displayFriendsNewsFeed(Manager &m)
+{
+  if (m.getCurrentUser() == nullptr)
+  {
     cout << "No user is logged in!\n";
     return;
   }
 
-  for(int i = 0; i < m.getCurrentUser()->getNumFriends(); i++){
+  for (int i = 0; i < m.getCurrentUser()->getNumFriends(); i++)
+  {
     FriendRelationship userFriend = m.getCurrentUser()->getFriend(i);
-    if(userFriend.status == ACCEPTED){
-      User* friendUser = m.findUser(userFriend.friendUsername);
+    if (userFriend.status == ACCEPTED)
+    {
+      User *friendUser = m.findUser(userFriend.friendUsername);
       cout << "Posts of " << friendUser->getUsername() << ":\n";
-      for(int j = 0; j < friendUser->getNumPosts(); j++){
+      for (int j = 0; j < friendUser->getNumPosts(); j++)
+      {
         cout << friendUser->getPost(j).getContent() << endl;
       }
     }
@@ -241,8 +271,8 @@ void printMenu()
   int userChoice;
   Manager m;
 
-  m.loadUsersFromFile();
-  m.loadFriendsFromFile();
+  // m.loadUsersFromFile();
+  // m.loadFriendsFromFile();
 
   while (true)
   {
@@ -276,6 +306,11 @@ void printMenu()
 
     if (userChoice == 0)
     {
+      cout << "Confirm again by entering 0!\n";
+      cin >> userChoice;
+      if (userChoice != 0)
+        continue;
+
       cout << "Allah Hafiz!\n";
       break;
     }
@@ -313,7 +348,7 @@ void printMenu()
     }
     else if (userChoice == 9)
     {
-      cout << "Search Users functionality!\n";
+      searchUser(m);
     }
     else if (userChoice == 10)
     {
@@ -329,8 +364,8 @@ void printMenu()
     }
   }
 
-  m.saveUsersToFile();
-  m.saveFriendsToFile();
+  // m.saveUsersToFile();
+  // m.saveFriendsToFile();
 }
 
 void printIntro()

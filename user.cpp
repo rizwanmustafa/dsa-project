@@ -110,3 +110,11 @@ int User::getNumPosts() const {return this->posts.size();}
   void User::addPost(Post post) {
     this->posts.push(post);
   }
+
+
+void User::displayPublicData() const{
+  cout << "Username: " << this->username << "\n";
+  cout << "City: " << this->city << "\n";
+  cout << "Number of friends: " << this->numFriends << "\n";
+  cout << "Number of posts: " << this->posts.size() << "\n";
+}

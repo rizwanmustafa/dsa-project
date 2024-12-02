@@ -45,5 +45,7 @@ public:
   Post getPost(int index) const;
   void addPost(Post post);
 
+  void displayPublicData() const;
+
   ~User();
 };

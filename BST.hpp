@@ -5,6 +5,9 @@
 template <typename T>
 class BST
 {
+
+public:
+
 	class BSTNode
 	{
 	public:
@@ -18,8 +21,6 @@ class BST
 			this->right = nullptr;
 		}
 	};
-	BSTNode* root;
-public:
 	BST()
 	{
 		this->root = nullptr;
@@ -45,6 +46,8 @@ public:
 		return search(this->root, data);
 	}
 
+	BSTNode* getRootNode(){ return this->root; }
+
 	~BST()
 	{
 		clear(this->root);
@@ -60,7 +63,7 @@ private:
 
 		BSTNode* newNode = new BSTNode(other->data);
 		newNode->lest = copy(other->left);
-		newNoe->right = copy(other->right);
+		newNode->right = copy(other->right);
 		return newNode;
 	}
 
@@ -85,6 +88,8 @@ private:
 			return nodeptr;
 		}
 	}
+
+	BSTNode* root;
 
 	BSTNode* deleteValue(BSTNode* nodeptr, T data)
 	{

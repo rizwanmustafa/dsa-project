@@ -2,7 +2,40 @@
 #include <string>
 #include "user.hpp"
 #include <fstream>
+#include "BST.hpp"
 #include "LinkedList.hpp"
+
+struct BstUserEntry{
+  User* user;
+  string username;
+
+
+
+
+  bool operator < (const BstUserEntry& other){
+    return username < other.username;
+  }
+
+  bool operator > (const BstUserEntry& other){
+    return username > other.username;
+  }
+
+  bool operator == (const BstUserEntry& other){
+    return username == other.username;
+  }
+
+  bool operator != (const BstUserEntry& other){
+    return username != other.username;
+  }
+
+  bool operator <= (const BstUserEntry& other){
+    return username <= other.username;
+  }
+
+  bool operator >= (const BstUserEntry& other){
+    return username >= other.username;
+  }
+};
 
 class Manager
 {
@@ -10,10 +43,29 @@ class Manager
 
   User *currentUser;
 
+  BST<BstUserEntry> userBst;
+
 public:
   Manager()
   {
     this->currentUser = nullptr;
+  }
+
+
+  User* searchUser(string username){
+    BST<BstUserEntry>::BSTNode* node = userBst.getRootNode();
+
+    while(node != nullptr){
+      if(node->data.username == username){
+        return node->data.user;
+      }else if(node->data.username < username){
+        node = node->right;
+      }else{
+        node = node->left;
+      }
+    }
+
+    return nullptr;
   }
 
   void logout()
@@ -58,7 +110,15 @@ public:
 
   void addNewUser(User *user)
   {
+    if(user == nullptr) return;
+
+
     users.insertLast(user);
+    BstUserEntry entry;
+    entry.user = user;
+    entry.username = user->getUsername();
+
+    userBst.insert(entry);
   }
 
   void printAllUsers()
